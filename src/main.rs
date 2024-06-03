@@ -27,7 +27,6 @@ fn dalle_command() -> Command {
     Command::new("dalle")
         .usage(r#"oat generate dalle "[prompt]""#)
         .action(|c| {
-            // Speichern Sie die Argumente für die Verwendung in der asynchronen Funktion
             let prompt: String = c.args.join(" ");
             tokio::spawn(async move {
                 dalle_action(prompt).await;
