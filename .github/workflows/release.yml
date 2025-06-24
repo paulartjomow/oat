@@ -1,0 +1,114 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    name: Build and Release
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            suffix: ''
+          - os: ubuntu-latest
+            target: aarch64-unknown-linux-gnu
+            suffix: ''
+          - os: macos-latest
+            target: x86_64-apple-darwin
+            suffix: ''
+          - os: macos-latest
+            target: aarch64-apple-darwin
+            suffix: ''
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            suffix: '.exe'
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@stable
+      with:
+        targets: ${{ matrix.target }}
+
+    - name: Install cross-compilation tools
+      if: matrix.target == 'aarch64-unknown-linux-gnu'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y gcc-aarch64-linux-gnu
+
+    - name: Build
+      run: |
+        if [ "${{ matrix.target }}" = "aarch64-unknown-linux-gnu" ]; then
+          export CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=aarch64-linux-gnu-gcc
+        fi
+        cargo build --release --target ${{ matrix.target }}
+      shell: bash
+
+    - name: Create release asset
+      run: |
+        cd target/${{ matrix.target }}/release
+        if [ "${{ runner.os }}" = "Windows" ]; then
+          7z a ../../../oat-${{ matrix.target }}.zip oat.exe
+        else
+          tar czf ../../../oat-${{ matrix.target }}.tar.gz oat
+        fi
+      shell: bash
+
+    - name: Upload Release Asset
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          oat-${{ matrix.target }}.tar.gz
+          oat-${{ matrix.target }}.zip
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  create-release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ github.ref_name }}
+        name: Release ${{ github.ref_name }}
+        body: |
+          ## Changes in this Release
+          
+          - Auto-generated release for version ${{ github.ref_name }}
+          - See commit history for detailed changes
+          
+          ## Installation
+          
+          ### Using the update command (if you have a previous version)
+          ```bash
+          oat update
+          ```
+          
+          ### Manual installation
+          Download the appropriate binary for your platform from the assets below.
+          
+          ### Supported Platforms
+          - Linux (x86_64, aarch64)
+          - macOS (x86_64, Apple Silicon)
+          - Windows (x86_64)
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 

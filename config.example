@@ -1,0 +1,12 @@
+# Example environment configuration for oat CLI
+
+# Disable automatic update checks (default: true)
+# Set to "false" to disable background update checking
+export OAT_AUTO_UPDATE_CHECK=true
+
+# You can add this to your shell profile (.bashrc, .zshrc, etc.) to make it permanent:
+# export OAT_AUTO_UPDATE_CHECK=false
+
+# Example usage:
+# source config.example  # to load these settings
+# ./oat generate         # will check for updates in background (if enabled) 
