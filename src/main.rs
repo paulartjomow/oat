@@ -9,6 +9,7 @@ use commands::currency::currency_command;
 use commands::update::{update_command, check_auto_update};
 use commands::password::password_command;
 use commands::qr::qr_command;
+use commands::ssh::ssh_command;
 
 #[tokio::main]
 async fn main() {
@@ -26,7 +27,8 @@ async fn main() {
         .command(currency_command())
         .command(update_command())
         .command(password_command())
-        .command(qr_command());
+        .command(qr_command())
+        .command(ssh_command());
 
     app.run(args);
 }

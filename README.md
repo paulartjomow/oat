@@ -10,6 +10,7 @@ The CLI toolbox for ~~OpenAI~~ everything
 - **Hash Generation**: Generate MD5, SHA256, and other hash types
 - **Password Generation**: Create secure passwords with various options
 - **Currency Conversion**: Real-time currency conversion rates
+- **SSH Manager**: Save and manage SSH connection profiles
 - **Auto-Update System**: Automatically check and install updates from GitHub
 
 ## Installation
@@ -34,8 +35,70 @@ cargo build --release
 oat generate    # Generate passwords and other data
 oat hash        # Generate hashes for text or files
 oat currency    # Convert between currencies
+oat ssh         # Manage SSH connections
 oat update      # Check for and install updates
 ```
+
+### SSH Manager
+
+The SSH manager allows you to save and quickly connect to SSH hosts.
+
+#### Features
+
+- Interactive onboarding when adding connections
+- Flag-based mode for automation
+- Save connection profiles locally in `~/.oat/ssh_config.json`
+- Support for custom ports and identity files
+- List, edit, and remove saved connections
+
+#### Usage
+
+```bash
+# Interactive mode - prompts step-by-step
+oat ssh add
+
+# Flag-based mode for automation
+oat ssh add --name prod --user ubuntu --host 192.168.1.100 --port 22 --identity-file ~/.ssh/id_rsa
+
+# List all saved connections
+oat ssh list
+
+# Connect to a saved host
+oat ssh connect prod
+
+# Edit an existing connection
+oat ssh edit prod
+
+# Remove a connection
+oat ssh remove prod
+```
+
+#### Connection Profile Structure
+
+Connections are stored in `~/.oat/ssh_config.json`:
+
+```json
+{
+  "connections": [
+    {
+      "name": "prod",
+      "user": "ubuntu",
+      "host": "192.168.1.100",
+      "port": 22,
+      "identity_file": "/path/to/key"
+    }
+  ]
+}
+```
+
+#### Interactive Onboarding
+
+When running `oat ssh add` without flags, you'll be prompted for:
+1. Connection name (required)
+2. SSH username (required)
+3. Host/IP address (required)
+4. Port (default: 22)
+5. Identity file path (optional)
 
 ### Auto-Update System
 
