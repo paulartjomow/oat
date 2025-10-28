@@ -15,14 +15,42 @@ The CLI toolbox for ~~OpenAI~~ everything
 
 ## Installation
 
-### From GitHub Releases (Recommended)
+### Quick Install (via curl)
 
-Download the latest binary for your platform from the [releases page](https://github.com/Prixix/oat/releases).
+Install the latest version with a one-liner:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/paulartjomow/oat/main/scripts/install.sh | sh
+```
+
+With bash explicitly:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/paulartjomow/oat/main/scripts/install.sh | bash
+```
+
+Custom install directory (defaults to `/usr/local/bin` if writable, otherwise `~/.local/bin`):
+
+```bash
+INSTALL_DIR="$HOME/.local/bin" curl -fsSL https://raw.githubusercontent.com/paulartjomow/oat/main/scripts/install.sh | sh
+```
+
+If no prebuilt binary is available for your platform, the installer falls back to building from source via Cargo:
+
+```bash
+cargo install --git https://github.com/paulartjomow/oat.git oat --locked --force
+```
+
+Requirements: `curl` or `wget` for download; `cargo` (Rust) only for the source-build fallback.
+
+### From GitHub Releases
+
+Download the latest binary for your platform from the [releases page](https://github.com/paulartjomow/oat/releases).
 
 ### From Source
 
 ```bash
-git clone https://github.com/Prixix/oat.git
+git clone https://github.com/paulartjomow/oat.git
 cd oat
 cargo build --release
 ```
