@@ -5,9 +5,11 @@ use std::fs;
 
 pub fn hash_command() -> Command {
     Command::new("hash")
+        .description("Compute MD5/SHA hashes for text or files")
         .usage("oat hash [algorithm] [input] [options]")
         .command(
             Command::new("md5")
+                .description("Generate MD5 hash from text or file")
                 .usage("oat hash md5 [text] or oat hash md5 --file [filepath]")
                 .action(|c| {
                     if c.args.is_empty() {
@@ -29,6 +31,7 @@ pub fn hash_command() -> Command {
         )
         .command(
             Command::new("sha256")
+                .description("Generate SHA-256 hash from text or file")
                 .usage("oat hash sha256 [text] or oat hash sha256 --file [filepath]")
                 .action(|c| {
                     if c.args.is_empty() {
@@ -50,6 +53,7 @@ pub fn hash_command() -> Command {
         )
         .command(
             Command::new("sha512")
+                .description("Generate SHA-512 hash from text or file")
                 .usage("oat hash sha512 [text] or oat hash sha512 --file [filepath]")
                 .action(|c| {
                     if c.args.is_empty() {
@@ -71,6 +75,7 @@ pub fn hash_command() -> Command {
         )
         .command(
             Command::new("all")
+                .description("Print MD5, SHA-256 and SHA-512 for input or file")
                 .usage("oat hash all [text] or oat hash all --file [filepath]")
                 .action(|c| {
                     if c.args.is_empty() {

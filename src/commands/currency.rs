@@ -6,6 +6,7 @@ use futures::executor;
 
 pub fn currency_command() -> Command {
     Command::new("currency")
+        .description("Convert amounts, view rates, and list supported currencies")
         .usage("oat currency [subcommand]")
         .command(convert_command())
         .command(rates_command())
@@ -14,6 +15,7 @@ pub fn currency_command() -> Command {
 
 fn convert_command() -> Command {
     Command::new("convert")
+        .description("Convert an amount between two currencies")
         .usage("oat currency convert [amount] [from] [to]")
         .action(|c| {
             if c.args.len() != 3 {
@@ -41,6 +43,7 @@ fn convert_command() -> Command {
 
 fn rates_command() -> Command {
     Command::new("rates")
+        .description("Show exchange rates relative to a base currency")
         .usage("oat currency rates [base_currency]")
         .action(|c| {
             let base_currency = if c.args.is_empty() {
@@ -57,6 +60,7 @@ fn rates_command() -> Command {
 
 fn list_command() -> Command {
     Command::new("list")
+        .description("List supported currency codes")
         .usage("oat currency list")
         .action(|_| {
             executor::block_on(async {

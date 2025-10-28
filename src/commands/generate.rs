@@ -6,12 +6,14 @@ use tokio;
 
 pub fn generate_command() -> Command {
     Command::new("generate")
+        .description("Generate content using AI subcommands")
         .usage("oat generate [subcommand]")
         .command(dalle_command())
 }
 
 fn dalle_command() -> Command {
     Command::new("dalle")
+        .description("Create an image from a text prompt via DALL·E")
         .usage(r#"oat generate dalle "[prompt]""#)
         .action(|c| {
             let prompt: String = c.args.join(" ");
