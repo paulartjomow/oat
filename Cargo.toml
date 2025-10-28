@@ -1,6 +1,6 @@
 [package]
 name = "oat"
-version = "0.1.2"
+version = "0.1.3"
 edition = "2021"
 description = "A versatile CLI tool for generating content, hashing, currency conversion, password generation, and QR codes"
 authors = ["Paul Artjomow <paul-artjomow@hotmail.com>"]
